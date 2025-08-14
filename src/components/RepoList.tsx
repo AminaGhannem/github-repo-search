@@ -1,9 +1,31 @@
 import type { Repository } from '../types';
 
+/**
+ * Props for the RepoList component.
+ */
 type Props = {
+  /** Array of repositories to display */
   repos: Repository[];
 };
 
+/**
+ * A component that renders a list of GitHub repositories.
+ * 
+ * Features:
+ * - Displays repository name, description, language, stars, and forks
+ * - Shows last update timestamp
+ * - Indicates archived repositories
+ * - Responsive grid layout
+ * - Empty state when no repositories are provided
+ * 
+ * @param {Props} props - Component props
+ * @returns {JSX.Element} Rendered repository list or empty state message
+ * 
+ * @example
+ * ```tsx
+ * <RepoList repos={userRepositories} />
+ * ```
+ */
 export default function RepoList({ repos }: Props) {
   if (!repos.length) {
     return <p style={{ marginTop: 16 }}>No repositories found.</p>;

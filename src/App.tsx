@@ -6,6 +6,26 @@ import RepoList from './components/RepoList'
 import { fetchUserRepos } from './api'
 import type { Repository, FetchState } from './types'
 
+/**
+ * Main application component for GitHub repository search and filtering.
+ * 
+ * Features:
+ * - Search GitHub users by username
+ * - Display repositories with filtering by name and language
+ * - Handle loading states and errors
+ * - Cancel in-flight requests when new search is initiated
+ * - Responsive design with proper accessibility
+ * 
+ * @returns {JSX.Element} Rendered application interface
+ * 
+ * @example
+ * ```tsx
+ * import App from './App'
+ * 
+ * // Render the app
+ * <App />
+ * ```
+ */
 function App() {
   const [repos, setRepos] = useState<Repository[]>([])
   const [status, setStatus] = useState<FetchState>('idle')
@@ -15,6 +35,11 @@ function App() {
   const [language, setLanguage] = useState<string>('')
   const abortRef = useRef<AbortController | null>(null)
 
+  /**
+   * Handles the search for a GitHub user's repositories.
+   * 
+   * @param {string} username - The GitHub username to search for
+   */
   async function handleSearch(username: string) {
     setQueriedUser(username)
     setNameQuery('')
@@ -37,6 +62,9 @@ function App() {
     }
   }
 
+  /**
+   * Filtered repositories based on current name and language filters.
+   */
   const filtered = useMemo(() => {
     const byName = nameQuery.trim().toLowerCase()
     return repos.filter(r => {

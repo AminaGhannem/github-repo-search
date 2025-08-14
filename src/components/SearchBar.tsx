@@ -1,11 +1,37 @@
 import { useEffect, useRef, useState } from 'react';
 
+/**
+ * Props for the SearchBar component.
+ */
 type Props = {
+  /** Callback function called when a search is submitted */
   onSearch: (username: string) => void;
+  /** Initial username value to populate the input */
   initialUsername?: string;
+  /** Whether the search is currently in progress */
   isLoading?: boolean;
 };
 
+/**
+ * A search input component for entering GitHub usernames.
+ * 
+ * Features:
+ * - Auto-focuses on mount for better UX
+ * - Prevents submission of empty usernames
+ * - Shows loading state during search
+ * - Accessible with proper labels and ARIA attributes
+ * 
+ * @param {Props} props - Component props
+ * @returns {JSX.Element} Rendered search form
+ * 
+ * @example
+ * ```tsx
+ * <SearchBar 
+ *   onSearch={(username) => handleSearch(username)}
+ *   isLoading={isSearching}
+ * />
+ * ```
+ */
 export default function SearchBar({ onSearch, initialUsername = '', isLoading = false }: Props) {
   const [username, setUsername] = useState(initialUsername);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -16,6 +42,11 @@ export default function SearchBar({ onSearch, initialUsername = '', isLoading = 
     }
   }, []);
 
+  /**
+   * Handles form submission and triggers the search callback.
+   * 
+   * @param {React.FormEvent} e - Form submission event
+   */
   function submit(e: React.FormEvent) {
     e.preventDefault();
     onSearch(username.trim());

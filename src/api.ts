@@ -1,5 +1,23 @@
 const GITHUB_API_BASE = 'https://api.github.com';
 
+/**
+ * Fetches public repositories for a given GitHub username.
+ * 
+ * @param {string} username - The GitHub username to fetch repositories for
+ * @param {AbortSignal} [signal] - Optional AbortSignal to cancel the request
+ * @returns {Promise<Repository[]>} Promise that resolves to an array of repositories
+ * @throws {Error} When the API request fails or returns an error status
+ * 
+ * @example
+ * ```typescript
+ * try {
+ *   const repos = await fetchUserRepos('octocat');
+ *   console.log(`Found ${repos.length} repositories`);
+ * } catch (error) {
+ *   console.error('Failed to fetch repositories:', error.message);
+ * }
+ * ```
+ */
 export async function fetchUserRepos(username: string, signal?: AbortSignal) {
   if (!username.trim()) {
     return [];
