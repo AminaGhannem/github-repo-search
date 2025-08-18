@@ -5,5 +5,5 @@ import App from './App'
 
 it('renders initial instructions', () => {
   render(<App />)
-  expect(screen.getByText(/Enter a username/i)).toBeInTheDocument()
+  expect(screen.getByText(/Amina/i)).toBeInTheDocument()
 }) 

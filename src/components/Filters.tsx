@@ -46,7 +46,7 @@ export default function Filters({ repos, nameQuery, onNameQueryChange, language,
     repos.forEach(r => {
       if (r.language) set.add(r.language);
     });
-    return Array.from(set).sort((a, b) => a.localeCompare(b));
+    return Array.from(set);
   }, [repos]);
 
   return (

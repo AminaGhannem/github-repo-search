@@ -34,13 +34,13 @@ type Props = {
  */
 export default function SearchBar({ onSearch, initialUsername = '', isLoading = false }: Props) {
   const [username, setUsername] = useState(initialUsername);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  // const inputRef = useRef<HTMLInputElement | null>(null);
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (inputRef.current) {
+  //     inputRef.current.focus();
+  //   }
+  // }, []);
 
   /**
    * Handles form submission and triggers the search callback.
@@ -56,7 +56,7 @@ export default function SearchBar({ onSearch, initialUsername = '', isLoading = 
     <form onSubmit={submit} style={{ display: 'flex', gap: 8, width: '100%' }} aria-label="Search GitHub user">
       <label htmlFor="username" className="visually-hidden">GitHub username</label>
       <input
-        ref={inputRef}
+        // ref={inputRef}
         id="username"
         type="text"
         placeholder="Search by GitHub username..."

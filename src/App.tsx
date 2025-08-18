@@ -14,7 +14,6 @@ import type { Repository, FetchState } from './types'
  * - Display repositories with filtering by name and language
  * - Handle loading states and errors
  * - Cancel in-flight requests when new search is initiated
- * - Responsive design with proper accessibility
  * 
  * @returns {JSX.Element} Rendered application interface
  * 

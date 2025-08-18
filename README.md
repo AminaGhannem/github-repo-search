@@ -51,23 +51,17 @@ npm run build-storybook
 
 ## Deployment
 
-### Netlify (Recommended)
+### Netlify ✅ (Deployed)
 
-1. Push your code to GitHub
-2. Connect your repository to [Netlify](https://netlify.com)
-3. Set build command: `npm run build`
-4. Set publish directory: `dist`
-5. Deploy!
+This app is already live on **Netlify**:  
+🔗 [https://reposearch-github.netlify.app/](https://reposearch-github.netlify.app/)
 
-The app includes a `netlify.toml` configuration file for automatic deployment.
+Any push to the `main` branch automatically triggers a new build and deployment thanks to the included `netlify.toml` configuration.
 
-### Other Platforms
+**Build settings on Netlify:**
+- **Build command:** `npm run build`
+- **Publish directory:** `dist`
 
-The app can be deployed to any static hosting service:
-- Vercel
-- GitHub Pages
-- Surge.sh
-- Firebase Hosting
 
 ## Code Quality
 
