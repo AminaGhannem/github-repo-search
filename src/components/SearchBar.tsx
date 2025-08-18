@@ -54,6 +54,7 @@ export default function SearchBar({ onSearch, initialUsername = '', isLoading = 
 
   return (
     <form onSubmit={submit} style={{ display: 'flex', gap: 8, width: '100%' }} aria-label="Search GitHub user">
+      <label htmlFor="username" className="visually-hidden">GitHub username</label>
       <input
         // ref={inputRef}
         id="username"
