@@ -12,6 +12,19 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/setupTests.ts'],
+    include: ['src/**/*.test.{ts,tsx}'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html'],
+      include: ['src/**/*.{ts,tsx}'], 
+      exclude: [
+        'src/**/*.stories.{ts,tsx}',
+        'src/setupTests.ts',
+        'src/main.tsx',
+        'src/vite-env.d.ts',
+      ],
+      all: true,
+    },
     projects: [{
       extends: true,
       plugins: [
@@ -30,7 +43,7 @@ export default defineConfig({
             browser: 'chromium'
           }]
         },
-        setupFiles: ['.storybook/vitest.setup.ts']
+        setupFiles: ['.storybook/vitest.setup.ts'],
       }
     }]
   }
