@@ -1,28 +1,40 @@
 /**
  * Represents a GitHub repository with essential metadata.
  */
-export type Repository = {
+export type GraphQlRepo = {
   /** Unique identifier for the repository */
-  id: number;
+    databaseId: number | null;
   /** Repository name */
   name: string;
   /** Repository description, if provided */
   description: string | null;
   /** URL to the repository on GitHub */
-  html_url: string;
+  url: string;
   /** Primary programming language, if detected */
-  language: string | null;
+    primaryLanguage: { name: string } | null;
   /** Number of stars the repository has received */
-  stargazers_count: number;
+  stargazerCount: number;
   /** Number of forks of the repository */
-  forks_count: number;
+  forkCount: number;
   /** Last update timestamp in ISO format */
-  updated_at: string;
+  updatedAt: string;
   /** Whether the repository is archived */
-  archived: boolean;
+  isArchived: boolean;
 };
 
 /**
  * Represents the current state of an API fetch operation.
  */
 export type FetchState = 'idle' | 'loading' | 'success' | 'error'; 
+
+// export type GraphQlRepo = {
+//     databaseId: number | null;
+//     name: string;
+//     description: string | null;
+//     url: string;
+//     primaryLanguage: { name: string } | null;
+//     stargazerCount: number;
+//     forkCount: number;
+//     updatedAt: string;
+//     isArchived: boolean;
+//   };

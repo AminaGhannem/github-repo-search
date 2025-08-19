@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
-import type { Repository } from '../types';
+import type { GraphQlRepo } from '../types';
 
 /**
  * Props for the Filters component.
  */
 type Props = {
   /** Array of repositories to extract languages from */
-  repos: Repository[];
+  repos: GraphQlRepo[];
   /** Current name filter query */
   nameQuery: string;
   /** Callback when name filter changes */
@@ -44,7 +44,7 @@ export default function Filters({ repos, nameQuery, onNameQueryChange, language,
   const languages = useMemo(() => {
     const set = new Set<string>();
     repos.forEach(r => {
-      if (r.language) set.add(r.language);
+      if (r.primaryLanguage?.name) set.add(r.primaryLanguage.name);
     });
     return Array.from(set);
   }, [repos]);

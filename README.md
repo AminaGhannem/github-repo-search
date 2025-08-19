@@ -21,6 +21,18 @@ npm run dev
 
 Open the URL printed in the terminal in Google Chrome.
 
+### Auth token (required for GraphQL v4)
+
+This app uses the GitHub GraphQL v4 API. You must provide a GitHub personal access token (classic) with `public_repo` scope:
+
+1. Create a `.env` file in the project root with:
+   
+   ```bash
+   VITE_GITHUB_TOKEN=ghp_xxx
+   ```
+
+2. Restart the dev server after adding the token.
+
 ## Build
 
 ```bash
@@ -72,7 +84,7 @@ Any push to the `master` branch automatically triggers a new build and deploymen
 
 ## Notes
 
-- Uses the GitHub REST API v3 (`/users/:username/repos`) and fetches up to 100 repositories sorted by last update.
+- Uses the GitHub GraphQL v4 API (/graphql) and fetches up to 100 public repositories sorted by last update.
 - Handles basic error states, rate limit messages from the API, and uses an abort controller to cancel in-flight requests.
 - Accessible labels and keyboard support.
 - Components are documented with JSDoc and showcased in Storybook.
@@ -82,7 +94,6 @@ Any push to the `master` branch automatically triggers a new build and deploymen
 - Add pagination for users with more than 100 repositories.
 - Add skeleton loaders and error boundary.
 - Persist last searched user in URL/query param.
-- GraphQL (v4) version using the GitHub GraphQL API.
 - Add more comprehensive test coverage.
 - Implement dark/light theme switching.
 - Add repository sorting options (stars, forks, date).

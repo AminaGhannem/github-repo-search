@@ -4,7 +4,7 @@ import SearchBar from './components/SearchBar'
 import Filters from './components/Filters'
 import RepoList from './components/RepoList'
 import { fetchUserRepos } from './api'
-import type { Repository, FetchState } from './types'
+import type { GraphQlRepo, FetchState } from './types'
 
 /**
  * Main application component for GitHub repository search and filtering.
@@ -26,7 +26,7 @@ import type { Repository, FetchState } from './types'
  * ```
  */
 function App() {
-  const [repos, setRepos] = useState<Repository[]>([])
+  const [repos, setRepos] = useState<GraphQlRepo[]>([])
   const [status, setStatus] = useState<FetchState>('idle')
   const [error, setError] = useState<string>('')
   const [queriedUser, setQueriedUser] = useState<string>('')
@@ -68,7 +68,7 @@ function App() {
     const byName = nameQuery.trim().toLowerCase()
     return repos.filter(r => {
       const matchesName = byName ? r.name.toLowerCase().includes(byName) : true
-      const matchesLang = language ? (r.language || '') === language : true
+      const matchesLang = language ? (r.primaryLanguage?.name || '') === language : true
       return matchesName && matchesLang
     })
   }, [repos, nameQuery, language])
