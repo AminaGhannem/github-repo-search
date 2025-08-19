@@ -8,7 +8,6 @@ Simple app to search a GitHub user and list their public repositories with clien
 - 📋 Display repositories with key information (stars, forks, language, etc.)
 - 🔧 Filter repositories by name and programming language
 - 📱 Responsive design with good UX principles
-- ♿ Accessible with proper ARIA labels and keyboard support
 - 🧪 Comprehensive testing with Vitest and Testing Library
 - 📚 Storybook for component development and documentation
 - 📖 JSDoc documentation following Google's style guide
@@ -56,7 +55,7 @@ npm run build-storybook
 This app is already live on **Netlify**:  
 🔗 [https://reposearch-github.netlify.app/](https://reposearch-github.netlify.app/)
 
-Any push to the `main` branch automatically triggers a new build and deployment thanks to the included `netlify.toml` configuration.
+Any push to the `master` branch automatically triggers a new build and deployment thanks to the included `netlify.toml` configuration.
 
 **Build settings on Netlify:**
 - **Build command:** `npm run build`
