@@ -58,6 +58,7 @@ export default function Filters({ repos, nameQuery, onNameQueryChange, language,
         onChange={(e) => onNameQueryChange(e.target.value)}
         style={{ flex: 1, padding: '8px 10px', borderRadius: 8, border: '1px solid #ccc' }}
       />
+      <label htmlFor="language" className="visually-hidden">Filter by programming language</label>
       <select
         value={language}
         onChange={(e) => onLanguageChange(e.target.value)}
