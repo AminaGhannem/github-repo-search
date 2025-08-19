@@ -28,7 +28,7 @@ This app uses the GitHub GraphQL v4 API. You must provide a GitHub personal acce
 1. Create a `.env` file in the project root with:
    
    ```bash
-   GITHUB_TOKEN=ghp_xxx
+   VITE_GITHUB_TOKEN=ghp_xxx
    ```
 
 2. Restart the dev server after adding the token.
