@@ -82,6 +82,7 @@ function App() {
       <h1 style={{ marginBottom: 12 }}>GitHub Repositories</h1>
       <p style={{ marginTop: 0, color: '#666' }}>Search a GitHub user to list public repositories. Filter by name and language.</p>
 
+      {status === 'idle' && <p>Enter a username to see repositories.</p>}
       <div style={{ display: 'grid', gap: 12, marginTop: 16 }}>
         <SearchBar onSearch={handleSearch} isLoading={status === 'loading'} />
 
@@ -95,7 +96,6 @@ function App() {
           />
         )}
 
-        {status === 'idle' && <p>Enter a username to see repositories.</p>}
         {status === 'loading' && <p>Loading…</p>}
         {status === 'error' && (
           <div role="alert" style={{ color: '#b00020' }}>{error}</div>
