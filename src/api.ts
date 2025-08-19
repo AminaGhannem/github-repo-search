@@ -7,7 +7,7 @@ const GITHUB_GRAPHQL_ENDPOINT = 'https://api.github.com/graphql';
  * using GitHub's GraphQL v4 API.
  * 
  * Maps the GraphQL response to the app's `Repository` shape.
- * Requires an access token via `VITE_GITHUB_TOKEN`.
+ * Requires an access token via `GITHUB_TOKEN`.
  * 
  * @param {string} username - The GitHub username to fetch repositories for
  * @param {AbortSignal} [signal] - Optional AbortSignal to cancel the request
@@ -24,9 +24,9 @@ export async function fetchUserRepos(username: string, signal?: AbortSignal) {
     return [];
   }
 
-  const token = import.meta.env.VITE_GITHUB_TOKEN as string | undefined;
+  const token = import.meta.env.GITHUB_TOKEN as string | undefined;
   if (!token) {
-    throw new Error('Missing GitHub token. Set VITE_GITHUB_TOKEN in your .env file.');
+    throw new Error('Missing GitHub token. Set GITHUB_TOKEN in your .env file.');
   }
 
   const query = `
