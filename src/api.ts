@@ -11,7 +11,7 @@ const GITHUB_GRAPHQL_ENDPOINT = 'https://api.github.com/graphql';
  * 
  * @param {string} username - The GitHub username to fetch repositories for
  * @param {AbortSignal} [signal] - Optional AbortSignal to cancel the request
- * @returns {Promise<Repository[]>} Promise that resolves to an array of repositories
+ * @returns {Promise<GraphQlRepo[]>} Promise that resolves to an array of repositories
  * @throws {Error} When the API request fails or returns an error status
  * 
  * @example

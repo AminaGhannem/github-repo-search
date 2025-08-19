@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Filters from './Filters';
-import type { Repository } from '../types';
+import type { GraphQlRepo } from '../types';
 
 const meta: Meta<typeof Filters> = {
   title: 'Components/Filters',
@@ -21,39 +21,39 @@ type Story = StoryObj<typeof meta>;
 /**
  * Sample repository data for testing.
  */
-const sampleRepos: Repository[] = [
+const sampleRepos: GraphQlRepo[] = [
   {
-    id: 1,
+    databaseId: 1,
     name: 'react-app',
     description: 'A React application',
-    html_url: 'https://github.com/user/react-app',
-    language: 'JavaScript',
-    stargazers_count: 150,
-    forks_count: 25,
-    updated_at: '2024-01-15T10:30:00Z',
-    archived: false,
+    url: 'https://github.com/user/react-app',
+    primaryLanguage: { name: 'JavaScript' },
+    stargazerCount: 150,
+    forkCount: 25,
+    updatedAt: '2024-01-15T10:30:00Z',
+    isArchived: false,
   },
   {
-    id: 2,
+    databaseId: 2,
     name: 'typescript-lib',
     description: 'TypeScript library',
-    html_url: 'https://github.com/user/typescript-lib',
-    language: 'TypeScript',
-    stargazers_count: 89,
-    forks_count: 12,
-    updated_at: '2024-01-10T14:20:00Z',
-    archived: false,
+    url: 'https://github.com/user/typescript-lib',
+    primaryLanguage: { name: 'TypeScript' },
+    stargazerCount: 89,
+    forkCount: 12,
+    updatedAt: '2024-01-10T14:20:00Z',
+    isArchived: false,
   },
   {
-    id: 3,
+    databaseId: 3,
     name: 'python-script',
     description: 'Python automation script',
-    html_url: 'https://github.com/user/python-script',
-    language: 'Python',
-    stargazers_count: 45,
-    forks_count: 8,
-    updated_at: '2024-01-08T09:15:00Z',
-    archived: false,
+    url: 'https://github.com/user/python-script',
+    primaryLanguage: { name: 'Python' },
+    stargazerCount: 45,
+    forkCount: 8,
+    updatedAt: '2024-01-08T09:15:00Z',
+    isArchived: false,
   },
 ];
 

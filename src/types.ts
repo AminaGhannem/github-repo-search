@@ -3,7 +3,7 @@
  */
 export type GraphQlRepo = {
   /** Unique identifier for the repository */
-    databaseId: number | null;
+  databaseId: number | null;
   /** Repository name */
   name: string;
   /** Repository description, if provided */
@@ -11,7 +11,7 @@ export type GraphQlRepo = {
   /** URL to the repository on GitHub */
   url: string;
   /** Primary programming language, if detected */
-    primaryLanguage: { name: string } | null;
+  primaryLanguage: { name: string } | null;
   /** Number of stars the repository has received */
   stargazerCount: number;
   /** Number of forks of the repository */
@@ -27,14 +27,3 @@ export type GraphQlRepo = {
  */
 export type FetchState = 'idle' | 'loading' | 'success' | 'error'; 
 
-// export type GraphQlRepo = {
-//     databaseId: number | null;
-//     name: string;
-//     description: string | null;
-//     url: string;
-//     primaryLanguage: { name: string } | null;
-//     stargazerCount: number;
-//     forkCount: number;
-//     updatedAt: string;
-//     isArchived: boolean;
-//   };
