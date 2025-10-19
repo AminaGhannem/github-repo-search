@@ -139,16 +139,33 @@ jobs:
       - name: Start app (background)
         run: |
           npm run preview -- --port 3000 --host 0.0.0.0 &
-          sleep 5
+          sleep 2
+
+      - name: Wait for app
+        run: |
+          for i in {1..30}; do
+            if curl -sSf http://localhost:3000 >/dev/null; then
+              echo "App ready"
+              exit 0
+            fi
+            echo "Waiting for app..."
+            sleep 2
+          done
+          echo "App did not start" >&2
+          exit 1
+
+      - name: Fix permissions
+        run: sudo chown -R 1000:1000 ${{ github.workspace }}
 
       - name: Run ZAP baseline scan
         run: |
           docker run --rm \
+            --network="host" \
             -v ${{ github.workspace }}:/zap/wrk \
             -u zap \
             -t ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py \
-            -t http://host.docker.internal:3000 \
+            -t http://localhost:3000 \
             -r zap_report.html
 
       - name: Upload ZAP report
@@ -163,4 +180,3 @@ jobs:
             echo "DAST found High/Critical issues"
             exit 1
           fi
-
