@@ -139,31 +139,31 @@ jobs:
       - name: Start server (background)
         run: |
           node server.ts &
-          for i in {1..20}; do
+          for i in {1..30}; do
             curl --silent --fail http://localhost:3000 && break
             echo "Waiting for server..."
-            sleep 3
+            sleep 2
           done
 
       - name: Run ZAP baseline scan
         run: |
+          mkdir -p ${{ github.workspace }}/zap-wrk
           docker run --rm \
-            -v ${{ github.workspace }}:/zap/wrk \
+            -v ${{ github.workspace }}/zap-wrk:/zap/wrk \
             -t ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py \
             -t http://localhost:3000 \
-            -r zap_report.html
-
+            -r /zap/wrk/zap_report.html
 
       - name: Upload ZAP report
         uses: actions/upload-artifact@v4
         with:
           name: zap-report
-          path: zap_report.html
+          path: zap-wrk/zap_report.html
 
       - name: Fail if ZAP found high/critical alerts
         run: |
-          if grep -i -E "High|Critical" zap_report.html >/dev/null 2>&1; then
+          if grep -i -E "High|Critical" zap-wrk/zap_report.html >/dev/null 2>&1; then
             echo "DAST found High/Critical issues"
             exit 1
           fi
