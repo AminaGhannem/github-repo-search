@@ -151,16 +151,22 @@ jobs:
         run: docker network create zapnet
 
       - name: Run app container
-        run: docker run -d --rm --name myapp --network zapnet -p 3000:3000 myapp:test
+        run: |
+          docker run -d \
+            --name myapp \
+            --network zapnet \
+            -p 3000:3000 \
+            myapp:test
+          docker ps
 
       - name: Wait for app to be ready
         run: |
-          for i in {1..20}; do
+          for i in {1..30}; do
             if curl --silent --fail http://localhost:3000; then
-              echo "App is ready"
+              echo "✅ App is ready"
               break
             fi
-            echo "Waiting for app..."
+            echo "⏳ Waiting for app..."
             sleep 3
           done
 
@@ -185,9 +191,17 @@ jobs:
           name: zap-report
           path: zap-wrk/zap_report.html
 
+      - name: Stop and cleanup
+        if: always()
+        run: |
+          docker logs myapp || true
+          docker stop myapp || true
+          docker network rm zapnet || true
+
       - name: Fail if ZAP found high/critical alerts
         run: |
           if grep -i -E "High|Critical" zap-wrk/zap_report.html >/dev/null 2>&1; then
-            echo "DAST found High/Critical issues"
+            echo "🚨 DAST found High/Critical issues"
             exit 1
           fi
+
