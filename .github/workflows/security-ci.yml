@@ -137,6 +137,11 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: Prepare ZAP workspace
+        run: |
+          mkdir -p zap-wrk
+          chmod -R 777 zap-wrk
+
       - name: Create Dockerfile for the app
         run: |
           echo "FROM node:20-alpine
@@ -144,10 +149,8 @@ jobs:
           COPY package*.json ./
           RUN npm ci --omit=dev
           COPY dist ./dist
-          COPY server.ts .
-          RUN npm install -g typescript ts-node
           EXPOSE 3000
-          CMD [\"ts-node\", \"server.ts\"]" > Dockerfile.app
+          CMD [\"node\", \"dist/server.js\"]" > Dockerfile.app
 
       - name: Build app image
         run: docker build -f Dockerfile.app -t myapp:test .
@@ -172,7 +175,6 @@ jobs:
                 -r /zap/wrk/zap_report.html
           " > docker-compose.yml
 
-          mkdir -p zap-wrk
           docker compose up --abort-on-container-exit
 
       - name: Upload ZAP report
