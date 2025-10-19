@@ -136,31 +136,14 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Start app (background)
+      - name: Start Express server (background)
         run: |
-          npm run preview -- --port 3000 --host 0.0.0.0 &
-          sleep 2
-
-      - name: Wait for app
-        run: |
-          for i in {1..30}; do
-            if curl -sSf http://localhost:3000 >/dev/null; then
-              echo "App ready"
-              exit 0
-            fi
-            echo "Waiting for app..."
-            sleep 2
-          done
-          echo "App did not start" >&2
-          exit 1
-
-      - name: Fix permissions
-        run: sudo chown -R 1000:1000 ${{ github.workspace }}
+          node server.ts &
+          sleep 5
 
       - name: Run ZAP baseline scan
         run: |
           docker run --rm \
-            --network="host" \
             -v ${{ github.workspace }}:/zap/wrk \
             -u zap \
             -t ghcr.io/zaproxy/zaproxy:stable \
