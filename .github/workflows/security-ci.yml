@@ -139,16 +139,20 @@ jobs:
       - name: Start server (background)
         run: |
           node server.ts &
+          # Wait for server to be ready
           for i in {1..30}; do
             curl --silent --fail http://localhost:3000 && break
             echo "Waiting for server..."
             sleep 2
           done
 
+      - name: Prepare ZAP workspace
+        run: mkdir -p ${{ github.workspace }}/zap-wrk
+
       - name: Run ZAP baseline scan
         run: |
-          mkdir -p ${{ github.workspace }}/zap-wrk
           docker run --rm \
+            --network host \
             -v ${{ github.workspace }}/zap-wrk:/zap/wrk \
             -t ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py \
@@ -167,3 +171,4 @@ jobs:
             echo "DAST found High/Critical issues"
             exit 1
           fi
+
