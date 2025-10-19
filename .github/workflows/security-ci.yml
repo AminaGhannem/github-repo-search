@@ -125,18 +125,34 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+      - name: Setup Docker Compose
+        run: sudo apt-get update && sudo apt-get install -y docker-compose
 
-      - name: Install deps
-        run: npm ci
+      - name: Create Docker Compose file
+        run: |
+          cat <<'EOF' > docker-compose.dast.yml
+          version: "3.8"
+          services:
+            app:
+              build:
+                context: .
+                dockerfile: Dockerfile.app
+              container_name: myapp
+              ports:
+                - "3000:3000"
+            zap:
+              image: ghcr.io/zaproxy/zaproxy:stable
+              depends_on:
+                - app
+              volumes:
+                - ./zap-wrk:/zap/wrk
+              command: >
+                zap-baseline.py
+                -t http://app:3000
+                -r /zap/wrk/zap_report.html
+          EOF
 
-      - name: Build
-        run: npm run build
-
-      - name: Build app Docker image
+      - name: Build app image
         run: |
           echo "FROM node:20-alpine
           WORKDIR /app
@@ -144,46 +160,17 @@ jobs:
           RUN npm ci --omit=dev
           EXPOSE 3000
           CMD [\"node\", \"server.ts\"]" > Dockerfile.app
-
           docker build -f Dockerfile.app -t myapp:test .
-
-      - name: Create Docker network
-        run: docker network create zapnet
-
-      - name: Run app container
-        run: |
-          docker run -d \
-            --name myapp \
-            --network zapnet \
-            -p 3000:3000 \
-            myapp:test
-          docker ps
-
-      - name: Wait for app to be ready
-        run: |
-          for i in {1..30}; do
-            if curl --silent --fail http://localhost:3000; then
-              echo "✅ App is ready"
-              break
-            fi
-            echo "⏳ Waiting for app..."
-            sleep 3
-          done
 
       - name: Prepare ZAP workspace
         run: |
-          mkdir -p ${{ github.workspace }}/zap-wrk
-          chmod -R 777 ${{ github.workspace }}/zap-wrk
+          mkdir -p zap-wrk
+          chmod -R 777 zap-wrk
 
-      - name: Run ZAP baseline scan
+      - name: Run DAST scan with Docker Compose
         run: |
-          docker run --rm \
-            --network zapnet \
-            -v ${{ github.workspace }}/zap-wrk:/zap/wrk \
-            -t ghcr.io/zaproxy/zaproxy:stable \
-            zap-baseline.py \
-            -t http://myapp:3000 \
-            -r /zap/wrk/zap_report.html
+          docker-compose -f docker-compose.dast.yml up --abort-on-container-exit
+          docker-compose -f docker-compose.dast.yml down
 
       - name: Upload ZAP report
         uses: actions/upload-artifact@v4
@@ -191,17 +178,9 @@ jobs:
           name: zap-report
           path: zap-wrk/zap_report.html
 
-      - name: Stop and cleanup
-        if: always()
-        run: |
-          docker logs myapp || true
-          docker stop myapp || true
-          docker network rm zapnet || true
-
       - name: Fail if ZAP found high/critical alerts
         run: |
           if grep -i -E "High|Critical" zap-wrk/zap_report.html >/dev/null 2>&1; then
             echo "🚨 DAST found High/Critical issues"
             exit 1
           fi
-
