@@ -136,20 +136,24 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Start Express server (background)
+      - name: Start server (background)
         run: |
           node server.ts &
-          sleep 5
+          for i in {1..20}; do
+            curl --silent --fail http://localhost:3000 && break
+            echo "Waiting for server..."
+            sleep 3
+          done
 
       - name: Run ZAP baseline scan
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/zap/wrk \
-            -u zap \
             -t ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py \
             -t http://localhost:3000 \
             -r zap_report.html
+
 
       - name: Upload ZAP report
         uses: actions/upload-artifact@v4
