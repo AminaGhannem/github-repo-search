@@ -161,8 +161,9 @@ jobs:
             -v ${{ github.workspace }}/zap-wrk:/zap/wrk \
             -t ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py \
-            -t http://127.0.0.1:3000 \
+            -t http://host.docker.internal:3000 \
             -r /zap/wrk/zap_report.html
+
 
 
       - name: Upload ZAP report
