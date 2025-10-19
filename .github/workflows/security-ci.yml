@@ -138,12 +138,16 @@ jobs:
 
       - name: Start server (background)
         run: |
-          node server.ts & 
+          node server.ts &
           for i in {1..30}; do
-            curl --silent --fail http://0.0.0.0:3000 && break
+            if curl --silent --fail http://127.0.0.1:3000; then
+              echo "Server is ready"
+              break
+            fi
             echo "Waiting for server..."
-            sleep 2
+            sleep 3
           done
+
 
       - name: Prepare ZAP workspace
         run: |
@@ -159,6 +163,7 @@ jobs:
             zap-baseline.py \
             -t http://127.0.0.1:3000 \
             -r /zap/wrk/zap_report.html
+
 
       - name: Upload ZAP report
         uses: actions/upload-artifact@v4
