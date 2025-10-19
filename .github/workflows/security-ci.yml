@@ -138,25 +138,26 @@ jobs:
 
       - name: Start server (background)
         run: |
-          node server.ts &
-          # Wait for server to be ready
+          node server.ts & 
           for i in {1..30}; do
-            curl --silent --fail http://localhost:3000 && break
+            curl --silent --fail http://0.0.0.0:3000 && break
             echo "Waiting for server..."
             sleep 2
           done
 
       - name: Prepare ZAP workspace
-        run: mkdir -p ${{ github.workspace }}/zap-wrk
+        run: |
+          mkdir -p ${{ github.workspace }}/zap-wrk
+          chmod -R 777 ${{ github.workspace }}/zap-wrk
+
 
       - name: Run ZAP baseline scan
         run: |
           docker run --rm \
-            --network host \
             -v ${{ github.workspace }}/zap-wrk:/zap/wrk \
             -t ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py \
-            -t http://localhost:3000 \
+            -t http://127.0.0.1:3000 \
             -r /zap/wrk/zap_report.html
 
       - name: Upload ZAP report
