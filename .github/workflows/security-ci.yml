@@ -160,12 +160,14 @@ jobs:
           tail -n +1 /tmp/preview.log || true
           exit 1
 
-      - name: Run ZAP baseline scan (docker)
+      - name: Run ZAP baseline scan
         run: |
-          # Using owasp/zap2docker-weekly to run baseline
-          docker pull owasp/zap2docker-weekly
-          docker run --rm -v $(pwd):/zap/wrk/:rw owasp/zap2docker-weekly zap-baseline.py -t http://host.docker.internal:3000 -r zap_report.html -J zap_report.json || true
-        # Note: on linux runner, host.docker.internal may not resolve; use 172.17.0.1 or 127.0.0.1
+          docker run --rm \
+            -v ${{ github.workspace }}:/zap/wrk \
+            -t ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py \
+            -t http://localhost:3000 \
+            -r zap_report.html
 
       - name: Upload ZAP reports
         uses: actions/upload-artifact@v4
