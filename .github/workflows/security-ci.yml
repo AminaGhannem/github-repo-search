@@ -136,35 +136,48 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Start server (background)
+      - name: Build app Docker image
         run: |
-          node server.ts &
-          for i in {1..30}; do
-            if curl --silent --fail http://127.0.0.1:3000; then
-              echo "Server is ready"
+          echo "FROM node:20-alpine
+          WORKDIR /app
+          COPY . .
+          RUN npm ci --omit=dev
+          EXPOSE 3000
+          CMD [\"node\", \"server.ts\"]" > Dockerfile.app
+
+          docker build -f Dockerfile.app -t myapp:test .
+
+      - name: Create Docker network
+        run: docker network create zapnet
+
+      - name: Run app container
+        run: docker run -d --rm --name myapp --network zapnet -p 3000:3000 myapp:test
+
+      - name: Wait for app to be ready
+        run: |
+          for i in {1..20}; do
+            if curl --silent --fail http://localhost:3000; then
+              echo "App is ready"
               break
             fi
-            echo "Waiting for server..."
+            echo "Waiting for app..."
             sleep 3
           done
-
 
       - name: Prepare ZAP workspace
         run: |
           mkdir -p ${{ github.workspace }}/zap-wrk
           chmod -R 777 ${{ github.workspace }}/zap-wrk
 
-
       - name: Run ZAP baseline scan
         run: |
           docker run --rm \
+            --network zapnet \
             -v ${{ github.workspace }}/zap-wrk:/zap/wrk \
             -t ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py \
-            -t http://host.docker.internal:3000 \
+            -t http://myapp:3000 \
             -r /zap/wrk/zap_report.html
-
-
 
       - name: Upload ZAP report
         uses: actions/upload-artifact@v4
@@ -178,4 +191,3 @@ jobs:
             echo "DAST found High/Critical issues"
             exit 1
           fi
-
